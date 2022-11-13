@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\PostStoreRequest;
+use App\Models\Posty;
 
 class PostController extends Controller
 {
@@ -13,8 +15,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
-        return view('posty.index');
+        $posty = Posty::all();
+        return view('posty.index', compact('posty'));
     }
 
     /**
@@ -30,22 +32,39 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * param  \Illuminate\Http\Request  $request
+     * return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    /* public function store(Request $request)
     {
         //dd($request);
-       /*  dump($request);
-        $request->dump();
-        echo $request->email;
-        sleep(2); */
+        // dump($request);
+        // $request->dump();
+        // echo $request->email;
+        // sleep(2);
         $request->validate([
             'tytul' => 'required',
             'autor' => 'required',
             'email' => 'required|email:rfc,dns|min:3',
             'tresc' => 'required|min:5|max:100'
         ]);
+        return redirect()->route('posty.index')->with('message', 'Post zostal dodany');
+    } */
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\PostStoreRequest  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(PostStoreRequest $request)
+    {
+        $posty = new Posty();
+        $posty->tytul = request('tytul');
+        $posty->autor = request('autor');
+        $posty->email = request('email');
+        $posty->tresc = request('tresc');
+        $posty->save();
         return redirect()->route('posty.index')->with('message', 'Post zostal dodany');
     }
 
@@ -57,7 +76,8 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        //
+        $post = Posty::findOrFail($id);
+        return view('posty.post', compact('post'));
     }
 
     /**
