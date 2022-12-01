@@ -8,6 +8,10 @@ use App\Models\Posty;
 
 class PostController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -65,7 +69,7 @@ class PostController extends Controller
         $posty->email = request('email');
         $posty->tresc = request('tresc');
         $posty->save();
-        return redirect()->route('posty.index')->with('message', 'Post zostal dodany');
+        return redirect()->route('posty.index')->with('message', 'Post został dodany');
     }
 
     /**
@@ -88,19 +92,27 @@ class PostController extends Controller
      */
     public function edit($id)
     {
-        //
+        $post = Posty::findOrFail($id);
+        return view('posty.zmien', compact('post'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\PostStoreRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(PostStoreRequest $request, $id)
     {
-        //
+        $post = Posty::findOrFail($id);
+        /* $post->tytul = request('tytul');
+        $post->autor = request('autor');
+        $post->email = request('email');
+        $post->tresc = request('tresc');
+        $post->update(); */
+        $post->update(request()->all()); // zadziała jak bedą dodane elementy kolekcji $fillable w Modelu Posty 
+        return redirect()->route('posty.index')->with('message', 'Post został zmieniony');
     }
 
     /**
@@ -111,6 +123,8 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Posty::findOrFail($id);
+        $post->delete();
+        return redirect()->route('posty.index')->with('message', 'Post został usuniety');
     }
 }

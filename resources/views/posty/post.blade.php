@@ -6,7 +6,9 @@ Szczegóły postu
 Szczegóły postu
 @endsection
 @section('tresc')
-<form action="{{ route('posty.index') }}" method="GET">
+<form action="{{ route('posty.destroy', $post->id) }}" method="POST">
+  @csrf
+  @method("DELETE")
     <div class="form-group">
       <label for="tytul">Tytuł</label>
       <input type="text" class="form-control" id="tytul" value="{{ $post->tytul }}" name="tytul" disabled="disabled">
@@ -27,6 +29,11 @@ Szczegóły postu
       <label for="tresc">Treść</label>
       <textarea class="form-control" id="tresc" rows="4" name="tresc" disabled="disabled"> {{ $post->tresc }}</textarea>
     </div>
-    <button type="submit" class="btn btn-primary">Powrót do listy</button>
+    <a href="{{ route('posty.index') }}"><button type="button" class="btn btn-primary m-1">Powrót do listy</button></a>
+    @auth
+    <a href="{{ route('posty.edit', $post->id) }}"><button type="button" class="btn btn-success m-1">Edytuj</button></a>
+    <button type="submit" class="btn btn-danger m-1">Usuń</button>  
+    @endauth
+    
   </form>
 @endsection
