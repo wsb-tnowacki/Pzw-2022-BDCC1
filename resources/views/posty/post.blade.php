@@ -19,15 +19,15 @@ Szczegóły postu
     </div>
     <div class="form-group">
         <label for="autor">Autor</label>
-        <input type="text" class="form-control" id="autor" value="{{ $post->autor }}" name="autor" disabled="disabled">
+        <input type="text" class="form-control" id="autor" value="{{ $post->user->name }} / {{ $post->update_user->name }}" name="autor" disabled="disabled">
     </div>
     <div class="form-group">
         <label for="email">Email</label>
-        <input type="text" class="form-control" value="{{ $post->email }}"  id="email" name="email" disabled="disabled">
+        <input type="text" class="form-control" value="{{ $post->email }} / {{ $post->user->email }}"  id="email" name="email" disabled="disabled">
     </div>
     <div class="form-group">
       <label for="tresc">Treść</label>
-      <textarea class="form-control" id="tresc" rows="4" name="tresc" disabled="disabled"> {{ $post->tresc }}</textarea>
+      <textarea class="form-control" id="tresc" rows="4" name="tresc" disabled="disabled">{{ $post->tresc }}</textarea>
     </div>
     <a href="{{ route('posty.index') }}"><button type="button" class="btn btn-primary m-1">Powrót do listy</button></a>
     @auth
@@ -36,4 +36,5 @@ Szczegóły postu
     @endauth
     
   </form>
+  {{-- dump($post) --}}
 @endsection
