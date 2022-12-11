@@ -86,7 +86,7 @@ class PostController extends Controller
     public function show($id)
     {
         //$post = Posty::findOrFail($id);
-        $post = Posty::findOrFail($id);
+        $post = Posty::with('user')->findOrFail($id);
         return view('posty.post', compact('post'));
     }
 
